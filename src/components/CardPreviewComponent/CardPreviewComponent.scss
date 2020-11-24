@@ -11,4 +11,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+
+  &__buttons {
+    display: flex;
+
+    div {
+      margin-right: 10px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
 }

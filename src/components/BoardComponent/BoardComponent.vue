@@ -20,18 +20,21 @@
                         :key="`card-${key}`"
                         class="board__card"
                     >
-                        <card-preview-component
-                            v-if="column.type === card.columnType"
-                            :card="card"
-                        />
-                        <modal-component
-                            v-show="card.isEditMode"
-                            @closeModal="setEditMode({ id: card.id, value: false })"
-                        >
-                            <template>
-                                <card-edit-component :id="card.id" :card="card"/>
-                            </template>
-                        </modal-component>
+                        <template v-if="column.type === card.columnType">
+                            <div>
+                                <card-preview-component :card-id="card.id" />
+                            </div>
+                            <modal-component
+                                v-show="card.isEditMode || card.isReadMode"
+                                @closeModal="closeCardModal(card.id)"
+                            >
+                                <template>
+                                    <card-edit-component
+                                        :card-id="card.id"
+                                    />
+                                </template>
+                            </modal-component>
+                        </template>
                     </div>
                 </template>
             </column-component>
@@ -41,7 +44,9 @@
             @closeModal="closeModal"
         >
             <template>
-                <card-edit-component />
+                <card-edit-component
+                    @closeModel="closeModal"
+                />
             </template>
         </modal-component>
     </div>

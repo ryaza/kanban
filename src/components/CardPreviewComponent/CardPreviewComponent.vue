@@ -1,9 +1,23 @@
 <template>
     <div class="card-preview">
-        <div class="card-edit__group">
-            {{ card.title }}
+        <div>
+            <input
+                v-show="isEditMode"
+                v-model="textModel"
+                type="text"
+                @keydown.enter="closeLocalEditMode"
+            />
+            <div
+                v-show="!isEditMode"
+                @click="setLocalEditMode(true)"
+            >
+                {{ title }}
+            </div>
         </div>
-        <div @click="setEditMode({ id: card.id, value: true })"> EDIT </div>
+        <div class="card-preview__buttons">
+            <div @click="openReadModal"> VIEW </div>
+            <div @click="openEditModal"> EDIT </div>
+        </div>
     </div>
 </template>
 <script src="./CardPreviewComponent.js"/>

@@ -5,7 +5,6 @@ export default {
   methods: {
     close() {
       this.$emit('closeModal');
-      console.log('closeModal');
     },
   },
 };

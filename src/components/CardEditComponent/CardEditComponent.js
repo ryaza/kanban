@@ -9,12 +9,8 @@ export default {
     [ButtonComponent.name]: ButtonComponent,
   },
   props: {
-    id: {
+    cardId: {
       type: Number,
-      default: null,
-    },
-    card: {
-      type: Object,
       default: null,
     },
   },
@@ -26,11 +22,15 @@ export default {
         tasks: [],
         columnType: 'to-do',
         isEditMode: false,
+        isReadMode: false,
         id: null,
       },
     };
   },
   computed: {
+    card() {
+      return this.cards.find((elem) => elem.id === this.cardId);
+    },
     ...mapGetters({
       cards: 'getCards',
     }),
@@ -38,16 +38,26 @@ export default {
       lastCardId: (state) => state.cards[state.cards.length - 1].id,
     }),
   },
+  watch: {
+    'card.isReadMode': {
+      handler(value) {
+        this.cardData.isReadMode = value;
+      },
+      immediate: true,
+    },
+  },
   methods: {
     save() {
-      if (this.cardData.title !== '') {
-        if (this.id !== null) {
-          this.cardData.id = this.id;
-          this.updatedCard({ data: this.cardData });
-        } else {
-          this.cardData.id = this.lastCardId + 1;
-          this.addNewCard(this.cardData);
-        }
+      if (this.cardId !== null) {
+        this.cardData.id = this.cardId;
+        this.updateDataCard({ id: this.cardId, data: this.cardData });
+
+        this.updateDataField({ id: this.cardId, fieldType: 'isEditMode', value: false });
+      } else {
+        this.cardData.id = this.lastCardId + 1;
+        this.addNewCard(this.cardData);
+
+        this.$emit('closeModel');
       }
     },
     addTask() {
@@ -62,12 +72,13 @@ export default {
     },
     ...mapMutations({
       addNewCard: 'addNewCard',
-      updatedCard: 'updatedCard',
+      updateDataCard: 'updateDataCard',
+      updateDataField: 'updateDataField',
     }),
   },
   created() {
-    if (this.card !== null) {
-      this.cardData = this.card;
+    if (this.cardId !== null) {
+      this.cardData = { ...this.card };
     }
   },
 };

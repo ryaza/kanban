@@ -33,8 +33,12 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
+    closeCardModal(id) {
+      this.updateDataField({ id, fieldType: 'isEditMode', value: false });
+      this.updateDataField({ id, fieldType: 'isReadMode', value: false });
+    },
     ...mapMutations({
-      setEditMode: 'setEditMode',
+      updateDataField: 'updateDataField',
     }),
   },
 };
